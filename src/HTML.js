@@ -119,7 +119,15 @@ export default class HTML extends PureComponent {
                 try {
                     this.setState({ loadingRemoteURL: true, errorLoadingRemoteURL: false });
                     let response = await fetch(uri);
-                    this.setState({ dom: await response.text(), loadingRemoteURL: false });
+                    let dom
+                    
+                    if (response.ok) {
+                        dom = await response.text();
+
+                        this.setState({ dom, loadingRemoteURL: false });
+                    } else {
+                        throw new Error();
+                    }
                 } catch (err) {
                     console.warn(err);
                     this.setState({ errorLoadingRemoteURL: true, loadingRemoteURL: false });
